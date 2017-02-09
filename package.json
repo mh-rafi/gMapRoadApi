@@ -1,13 +1,9 @@
 {
-  "name": "chat-example",
+  "name": "gmap-road",
   "version": "0.0.0",
   "scripts": {
     "start": "node server"
   },
-  "description": "A chat example to showcase how to use `socket.io` with a static `express` server with `async` for control flow.",
-  "main": "server.js",
-  "repository": "",
-  "author": "Mostafa Eweda <mo.eweda@gmail.com>",
   "dependencies": {
     "angular": "^1.6.2",
     "angular-route": "^1.6.2",
