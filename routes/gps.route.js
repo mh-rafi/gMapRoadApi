@@ -68,8 +68,43 @@ router.route('/gps/raw')
 	    if(!postData) {
 	        return res.status(400).send({message: 'Bad data'});
 	    }
+	    
+	    var gpsDataToSave = postData.wpt;
+	    if(gpsDataToSave.length > 98) {
+	    	var gpsDataToTrim = gpsDataToSave.slice();
+	    	console.log( 'gpsDataToTrim %s', gpsDataToTrim.length);
+	    	
+	    	// var firstItem = gpsDataToTrim.splice(0, 1);
+	    	var lastItem = gpsDataToTrim.splice(gpsDataToTrim.length - 1);
+	    	
+	    	console.log( 'gpsDataToTrim %s', gpsDataToTrim.length);
+	    	
+	    	var noOfItems = gpsDataToTrim.length;
+	    	var distance = parseInt(noOfItems / (noOfItems - 98));
+	    	
+	    	console.log( 'distance %s noOfItems %s', distance, noOfItems);
+	    	
+	    	for(var i = distance; i <= noOfItems; i += distance) {
+	    		gpsDataToTrim.splice(i, 1);
+	    	}
+	    	
+	    	if(gpsDataToTrim.length > 97) {
+	    		var noOfextraItem =  gpsDataToTrim.length - 97;
+	    		gpsDataToTrim.splice(gpsDataToTrim.length - noOfextraItem, noOfextraItem);
+	    		console.log( 'noOfextraItem %s', noOfextraItem);
+	    	}
+	    	
+	    	gpsDataToTrim.push(lastItem[0]);
+	    	gpsDataToSave = gpsDataToTrim;
+	    }
+	    
+	    // res.send(gpsDataToSave);
+	    
+	    
+	    
+	    
 	    var newGps = new GPS();
-	    newGps.gpsData = postData.wpt;
+	    newGps.gpsData = gpsDataToSave;
 	    newGps.save(function(err, resGps) {
 	        if(err) {
 	            return res.status(500).send({message: 'Error while saving data to DB'});

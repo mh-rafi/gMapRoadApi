@@ -33,7 +33,7 @@ app.use(express.static(path.resolve(__dirname, 'client')));
 //   console.log("server listening at", addr.address + ":" + addr.port);
 // });
 
-var port = process.env.PORT || 8000;
+var port = process.env.PORT || 8080;
 app.set('port', port);
 
 var server = http.createServer(app);
