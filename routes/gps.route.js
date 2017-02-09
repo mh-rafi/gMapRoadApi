@@ -21,8 +21,31 @@ var formatGPSData = function(data) {
 
 router.route('/gps/raw')
 	.get(function(req, res) {
+	    var queryId = req.query.id;
+	    
+	   // return all items
+	    if(!queryId) {
+	      GPS.find({}, function(err, items) {
+	          if (err) {
+				return res.status(500).json({
+					state: 'error',
+					message: 'Server Error!'
+				});
+			};
+			if(!items) {
+			    return res.status(404).json({
+					state: 'error',
+					message: 'No item found!'
+				});
+			};
+			res.send(items);
+	      });
+	      return;  
+	    };
+	    
+	   // Search by id
 		GPS.findOne({
-		    _id: req.query.id
+		    _id: queryId
 		}, function(err, gps) {
 			if (err) {
 				return res.status(500).json({
@@ -37,7 +60,6 @@ router.route('/gps/raw')
 				});
 
             gps.gpsData = formatGPSData(gps.gpsData);
-            
 			res.send(gps);
 		});
 	})
@@ -53,10 +75,11 @@ router.route('/gps/raw')
 	            return res.status(500).send({message: 'Error while saving data to DB'});
 	        }
 	        
-	        
 	        res.send(resGps);
 	    });
 	})
+
+
 
 router.route('/gps/road')
 	.get(function(req, res) {
@@ -69,7 +92,7 @@ router.route('/gps/road')
                 return res.status(500).send({message: 'Server Error!'});
            }
            if(roadGps) {
-               console.log('sending from DB');
+                console.log('sending from DB');
                 return res.send(roadGps);
            }
            
