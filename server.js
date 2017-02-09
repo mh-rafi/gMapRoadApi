@@ -33,13 +33,13 @@ app.use(express.static(path.resolve(__dirname, 'client')));
 //   console.log("server listening at", addr.address + ":" + addr.port);
 // });
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = process.env.PORT || 8000;
 app.set('port', port);
 
 var server = http.createServer(app);
 
 server.listen(port, function() {
-  console.log("server listening");
+  console.log("server listening "+ port);
 });
 server.on('listening', onListening);
 
