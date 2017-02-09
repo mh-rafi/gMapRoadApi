@@ -6,6 +6,7 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "@google/maps": "^0.3.1",
     "angular": "^1.6.2",
     "angular-route": "^1.6.2",
     "async": "~0.2.8",
