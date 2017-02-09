@@ -1,8 +1,9 @@
 {
   "name": "gmap-road",
   "version": "0.0.0",
+  "main": "server.js",
   "scripts": {
-    "start": "node server"
+    "start": "node server.js"
   },
   "dependencies": {
     "angular": "^1.6.2",
