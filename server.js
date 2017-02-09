@@ -4,6 +4,8 @@ var path = require('path');
 
 var async = require('async');
 var express = require('express');
+var bodyParser = require('body-parser');
+
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://road-gps:road-gps8900@ds147069.mlab.com:47069/road-gps');
@@ -14,6 +16,10 @@ var gpsApi = require("./routes/gps.route");
 
 var app = express();
 var server = http.createServer(app);
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
 
 app.use('/api', gpsApi);
 

@@ -53,6 +53,7 @@ router.route('/gps/raw')
 	            return res.status(500).send({message: 'Error while saving data to DB'});
 	        }
 	        
+	        
 	        res.send(resGps);
 	    });
 	})
