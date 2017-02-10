@@ -22,8 +22,9 @@ var formatGPSData = function(data) {
 router.route('/gps/raw')
 	.get(function(req, res) {
 	    var queryId = req.query.id;
+	    var isFormatted = req.query.formatted;
 	    
-	   // return all items
+	   // RETURN ALL ITEMS 
 	    if(!queryId) {
 	      GPS.find({}, function(err, items) {
 	          if (err) {
@@ -43,7 +44,7 @@ router.route('/gps/raw')
 	      return;  
 	    };
 	    
-	   // Search by id
+	   // SEARCH BY ID
 		GPS.findOne({
 		    _id: queryId
 		}, function(err, gps) {
@@ -58,8 +59,11 @@ router.route('/gps/raw')
 					state: 'error',
 					message: 'no item found!'
 				});
-
-            gps.gpsData = formatGPSData(gps.gpsData);
+				
+			if(isFormatted === 'true') {
+				gps.gpsData = formatGPSData(gps.gpsData);	
+			};
+			
 			res.send(gps);
 		});
 	})
@@ -68,22 +72,14 @@ router.route('/gps/raw')
 	    if(!postData) {
 	        return res.status(400).send({message: 'Bad data'});
 	    }
-	    
 	    var gpsDataToSave = postData.wpt;
+	    
+	    // TRIM INPUT DATA
 	    if(gpsDataToSave.length > 98) {
 	    	var gpsDataToTrim = gpsDataToSave.slice();
-	    	console.log( 'gpsDataToTrim %s', gpsDataToTrim.length);
-	    	
-	    	// var firstItem = gpsDataToTrim.splice(0, 1);
 	    	var lastItem = gpsDataToTrim.splice(gpsDataToTrim.length - 1);
-	    	
-	    	console.log( 'gpsDataToTrim %s', gpsDataToTrim.length);
-	    	
 	    	var noOfItems = gpsDataToTrim.length;
 	    	var distance = parseInt(noOfItems / (noOfItems - 98));
-	    	
-	    	console.log( 'distance %s noOfItems %s', distance, noOfItems);
-	    	
 	    	for(var i = distance; i <= noOfItems; i += distance) {
 	    		gpsDataToTrim.splice(i, 1);
 	    	}
@@ -93,16 +89,10 @@ router.route('/gps/raw')
 	    		gpsDataToTrim.splice(gpsDataToTrim.length - noOfextraItem, noOfextraItem);
 	    		console.log( 'noOfextraItem %s', noOfextraItem);
 	    	}
-	    	
 	    	gpsDataToTrim.push(lastItem[0]);
 	    	gpsDataToSave = gpsDataToTrim;
 	    }
-	    
-	    // res.send(gpsDataToSave);
-	    
-	    
-	    
-	    
+	    // SAVE TO DB
 	    var newGps = new GPS();
 	    newGps.gpsData = gpsDataToSave;
 	    newGps.save(function(err, resGps) {
@@ -115,22 +105,24 @@ router.route('/gps/raw')
 	})
 
 
-
+// ROAD APIs
 router.route('/gps/road')
 	.get(function(req, res) {
         var queryId = req.query.id;
         
+        //FIND ROAD GPS BY RAW GPS ID
         RoadGPS.findOne({
             gpsId: queryId
         }, function(err, roadGps) {
            if(err) {
                 return res.status(500).send({message: 'Server Error!'});
            }
+           // RESPONSE DATA FROM DB
            if(roadGps) {
-                console.log('sending from DB');
                 return res.send(roadGps);
            }
            
+           // FIND RAW GPS DATA BY ID
            GPS.findOne({
     		    _id: queryId
     		}, function(err, gps) {
@@ -142,6 +134,7 @@ router.route('/gps/road')
     
                 gps.gpsData = formatGPSData(gps.gpsData);
                 
+                // GET SNAPTORAD GPS FROM GOOGLE
                 googleMapsClient.snapToRoads({
                     path: gps.gpsData
                 }, function(err, response) {
@@ -150,6 +143,7 @@ router.route('/gps/road')
                         return res.status(500).send({message: 'Bad response from Raod api!', error: err});
                      }
                      
+                     //SAVE NEW ROAD GPS DATA TO DB 
                      var newRoadGps = new RoadGPS();
                      newRoadGps.gpsId = queryId;
                      newRoadGps.snappedPoints = response.json.snappedPoints;
@@ -157,7 +151,6 @@ router.route('/gps/road')
                          if(err) {
                              return res.status(500).send({message: 'Error while saving Road api gps to DB'});
                          }
-                         console.log('saved new Roadgps');
                          res.send(gpsRes);
                      });
                 })

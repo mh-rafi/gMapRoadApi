@@ -40,9 +40,6 @@ POST https://gmap-road.herokuapp.com/api/gps/raw
     	}
 	}
 	
-	
-
-
 
 ### Get all raw GPS data
 GET https://gmap-road.herokuapp.com/api/gps/raw
@@ -81,8 +78,34 @@ GET https://gmap-road.herokuapp.com/api/gps/raw
     	"__v": 0
     }]
 
+
 ### Get single raw GPS data by id
 GET https://gmap-road.herokuapp.com/api/gps/raw/?id=589c02bcf9c7f53a5fee39fb
+
+    {
+    	"_id": "589bffd42da3292cd15cfad4",
+    	"gpsData": [{
+    		"_lon": "29.0291",
+    		"_lat": "41.07794",
+    		"name": "WP01-A",
+    		"ele": "141.4"
+    	}, {
+    		"_lon": "29.02886",
+    		"_lat": "41.0778",
+    		"name": "WP02-B",
+    		"ele": "141.5"
+    	}, {
+    		"_lon": "29.02866",
+    		"_lat": "41.07775",
+    		"name": "WP03-C",
+    		"ele": "141.7"
+    	},
+    	.....],
+    	"__v": 0
+    }
+
+### Get single raw GPS data by id (Returns Formatted data)
+GET https://gmap-road.herokuapp.com/api/gps/raw/?id=589c02bcf9c7f53a5fee39fb&formatted=true
 
     Sample Output
     {
