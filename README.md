@@ -189,3 +189,26 @@ GET https://gmap-road.herokuapp.com/api/gps/road/?id=589c02bcf9c7f53a5fee39fb
     Note: For only first time this data will come from google and will be saved to mongoDB,
         Next time it will be retrieved form mongoDB.
 
+### Get single Road api snapedToRoad GPS data by id (Returns Formatted data)
+GET https://gmap-road.herokuapp.com/api/gps/road/?id=589c02bcf9c7f53a5fee39fb&formatted=true
+
+    Sample Output
+        {
+        	"_id": "589c3f13c321fa9cccf741ec",
+        	"snappedPoints": [{
+                "lng": 29.00071,
+                "lat": 41.06672
+            }, {
+                "lng": 29.00065,
+                "lat": 41.06672
+            }, {
+                "lng": 29.00055,
+                "lat": 41.06671
+            }, {
+                "lng": 29.00041,
+                "lat": 41.06673
+            }, 
+            .......],
+        	"gpsId": "589c02bcf9c7f53a5fee39fb",
+        	"__v": 0
+        }
