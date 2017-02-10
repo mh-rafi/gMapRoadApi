@@ -18,6 +18,14 @@ var formatGPSData = function(data) {
     });
     return gpsData;
 }
+var formatRoadGPSData = function(data) {
+    var RoadGpsData = [];
+    data.forEach(function(item) {
+    	RoadGpsData.push({lat: item.location.latitude, lng: item.location.longitude})
+    });
+    return RoadGpsData;
+}
+
 
 router.route('/gps/raw')
 	.get(function(req, res) {
@@ -109,6 +117,7 @@ router.route('/gps/raw')
 router.route('/gps/road')
 	.get(function(req, res) {
         var queryId = req.query.id;
+        var isFormatted = req.query.formatted;
         
         //FIND ROAD GPS BY RAW GPS ID
         RoadGPS.findOne({
@@ -119,6 +128,9 @@ router.route('/gps/road')
            }
            // RESPONSE DATA FROM DB
            if(roadGps) {
+           		if(isFormatted === 'true') {
+           			roadGps.snappedPoints = formatRoadGPSData(roadGps.snappedPoints);
+           		}
                 return res.send(roadGps);
            }
            
@@ -148,9 +160,12 @@ router.route('/gps/road')
                      newRoadGps.gpsId = queryId;
                      newRoadGps.snappedPoints = response.json.snappedPoints;
                      newRoadGps.save(function(err, gpsRes) {
-                         if(err) {
-                             return res.status(500).send({message: 'Error while saving Road api gps to DB'});
-                         }
+                        if(err) {
+                            return res.status(500).send({message: 'Error while saving Road api gps to DB'});
+                        }
+                        if(isFormatted === 'true') {
+		           			gpsRes.snappedPoints = formatRoadGPSData(gpsRes.snappedPoints);
+		           		}
                          res.send(gpsRes);
                      });
                 })

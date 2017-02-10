@@ -1,15 +1,15 @@
 ;(function() {
-    var gpsCtrl = ['$http', function($http) {
-        console.log('gps');
+    var gpsCtrl = ['$http', '$routeParams', function($http, $routeParams) {
+        console.log($routeParams);
         
         $http({
             url: '/api/gps/raw',
             method: 'GET',
             params: {
-                id: '589bffd42da3292cd15cfad4'
+                id: $routeParams.id,
+                formatted: true
             }
         }).then(function(res) {
-            console.log(res);
             var map = new google.maps.Map(document.getElementById('gpsMap'), {
               zoom: 15,
               center: res.data.gpsData[0],
@@ -20,14 +20,40 @@
             var flightPath = new google.maps.Polyline({
               path: res.data.gpsData,
               geodesic: true,
-              strokeColor: '#FF0000',
+              strokeColor: '#033661',
               strokeOpacity: 1.0,
               strokeWeight: 2
             });
-    
             flightPath.setMap(map);
+            
+            $http({
+               url: '/api/gps/road',
+                method: 'GET',
+                params: {
+                    id: $routeParams.id,
+                    formatted: true
+                } 
+            }).then(function(resData) {
+                console.log(resData);
+                var roadMap = new google.maps.Map(document.getElementById('roadGpsMap'), {
+                  zoom: 15,
+                  center: resData.data.snappedPoints[0],
+                  mapTypeId: 'terrain'
+                });
+                new google.maps.Polyline({
+                  path: resData.data.snappedPoints,
+                  geodesic: true,
+                  strokeColor: '#033661',
+                  strokeOpacity: 1.0,
+                  strokeWeight: 5
+                })
+                .setMap(roadMap);
+                
+            }, function(err) {
+                console.log('get roadgps err', err);
+            });
         }, function(err) {
-            console.log('err', err);
+            console.log('get gps err', err);
         })
     }];
     

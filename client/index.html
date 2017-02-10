@@ -1,21 +1,41 @@
 <!doctype html>
 <html lang="en" ng-app="roadGPS">
   <head>
+    <base href="/">
     <title>Gmap Road </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/bootstrap-responsive.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-Vw8qqIhTDPeNUjnorvQokWP4bzz5gBg"></script>
     <style>
       body {
         padding-top: 60px;
+      }
+      .btns {
+        margin: 0 0 30px;
+      }
+      .btns .btn {
+        margin-right: 10px;
       }
     </style>
 
   </head>
   <body>
     <div class="container">
-      <div ng-view></div>
+      <div class="row">
+        
+        <div class="col-md-12 btns">
+            <div class="">We have {{allGPS.length}} collections of GPS data in Database. Click on a button</div>
+            <br>
+            <a ng-href="/gpsmap/{{gpsId}}" class="btn btn-primary" ng-repeat="gpsId in allGPS">{{gpsId}}</a>
+        </div>
+        
+        <div class="col-md-12">
+          <div ng-view></div>
+        </div>
+        <div class="col-md-12">
+          <small><a href="https://github.com/mh-rafi/gMapRoadApi/blob/master/README.md">API reference</a></small>
+        </div>
+      </div>
     </div>
     
     <script src="/js/jquery.min.js"></script>
