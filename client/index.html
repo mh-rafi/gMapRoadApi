@@ -5,7 +5,7 @@
     <title>Gmap Road </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-Vw8qqIhTDPeNUjnorvQokWP4bzz5gBg"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-Vw8qqIhTDPeNUjnorvQokWP4bzz5gBg&libraries=geometry&sensor=false"></script>
     <style>
       body {
         padding-top: 60px;
@@ -26,7 +26,7 @@
         <div class="col-md-12 btns">
             <div class="">We have {{allGPS.length}} collections of GPS data in Database. Click on a button</div>
             <br>
-            <a ng-href="/gpsmap/{{gpsId}}" class="btn btn-primary" ng-repeat="gpsId in allGPS">{{gpsId}}</a>
+            <a ng-href="/demo/gpsmap/{{gpsId}}" class="btn btn-primary" ng-repeat="gpsId in allGPS">{{gpsId}}</a>
         </div>
         
         <div class="col-md-12">

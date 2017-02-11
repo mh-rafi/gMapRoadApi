@@ -2,16 +2,16 @@
     angular.module('roadGPS', ['ngRoute'])
     .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 		$routeProvider
-			.when('/', {
+			.when('/demo', {
 				templateUrl: 'views/main.html'
 			})
-			.when('/gpsmap/:id', {
+			.when('/demo/gpsmap/:id', {
 				templateUrl: 'views/gps.html',
 				controller: 'gpsController',
 				controllerAs: 'gpsCtrl'
 			})
 			.otherwise({
-				redirectTo: '/'
+				redirectTo: '/demo'
 			});
 			$locationProvider.html5Mode(true);
 	}])

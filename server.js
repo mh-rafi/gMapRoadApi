@@ -20,6 +20,8 @@ var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use('/demo/*|/demo', express.static(path.join(__dirname, 'client')));
+
 
 app.use('/api', gpsApi);
 
