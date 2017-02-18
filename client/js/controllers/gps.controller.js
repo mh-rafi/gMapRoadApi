@@ -10,11 +10,10 @@
             url: '/api/gps/raw',
             method: 'GET',
             params: {
-                id: $routeParams.id,
-                formatted: true
+                id: $routeParams.id
             }
         }).then(function(res) {
-            
+            console.log(res.data);
             var map = new google.maps.Map(document.getElementById('gpsMap'), {
               zoom: 15,
               center: res.data.gpsData[0],
@@ -43,6 +42,7 @@
                     formatted: true
                 } 
             }).then(function(resData) {
+                console.log('road', resData.data);
                 var roadMap = new google.maps.Map(document.getElementById('roadGpsMap'), {
                   zoom: 15,
                   center: resData.data.snappedPoints[0],
