@@ -1,11 +1,3 @@
-
-     ,-----.,--.                  ,--. ,---.   ,--.,------.  ,------.
-    '  .--./|  | ,---. ,--.,--. ,-|  || o   \  |  ||  .-.  \ |  .---'
-    |  |    |  || .-. ||  ||  |' .-. |`..'  |  |  ||  |  \  :|  `--, 
-    '  '--'\|  |' '-' ''  ''  '\ `-' | .'  /   |  ||  '--'  /|  `---.
-     `-----'`--' `---'  `----'  `---'  `--'    `--'`-------' `------'
-    ----------------------------------------------------------------- 
-    
 ## Demo link
 https://gmap-road.herokuapp.com
 
@@ -14,14 +6,14 @@ https://gmap-road.herokuapp.com
 ### Add new raw GPS data
 POST https://gmap-road.herokuapp.com/api/gps/raw
 
+    CSV file should have this two columns.
+    -----------------------------------------------
+    |      Latitude        |        Longitude     |
+    -----------------------------------------------
     Note: Request body should be formData object, file input element name should be "csvfile".
     If data more than 100, extra data will be removed evenly from input;
     
     
-        
-
-	
-
 ### Get all raw GPS data
 GET https://gmap-road.herokuapp.com/api/gps/raw
 
