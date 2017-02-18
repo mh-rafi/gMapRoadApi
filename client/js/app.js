@@ -17,18 +17,25 @@
 	}])
 	.run(['$rootScope', '$http', function($rootScope, $http) {
 		
-	    $http.get('/api/gps/raw').then(function(res) {
-	    	$rootScope.allGPS = [];
-	    	angular.forEach(res.data, function(item) {
-	    		$rootScope.allGPS.push(item._id);
-	    	});
-	    	console.log($rootScope.allGPS)
-	    }, function(err) {
-	    	console.log(err)
-	    });
+		$rootScope.getAllGps = function(cb) {
+			$http.get('/api/gps/raw').then(function(res) {
+		    	$rootScope.allGPS = [];
+		    	angular.forEach(res.data, function(item) {
+		    		$rootScope.allGPS.push(item._id);
+		    	});
+		    	if(cb)
+		    		cb();
+		    	console.log($rootScope.allGPS)
+		    }, function(err) {
+		    	console.log(err)
+		    });
+		}
+		
 	    
 	    
-	    $rootScope.uploadFile = function(){
+	    
+	    $rootScope.uploadFile = function() {
+	    	$rootScope.isUploading = true;
 	        var file = $rootScope.gpsCSVFile;
 	        var fd = new FormData();
 	        fd.append('csvfile', file);
@@ -39,10 +46,14 @@
 	        })
 	        .then(function(res){
 	          console.log("success!!", res);
+	          $rootScope.isUploading = false;
+	          $rootScope.getAllGps();
 	        }, function(err) {
 	          console.log("error!!", err);
 	        });
 	    };
+	    
+	    $rootScope.getAllGps();
 	}])
 	.directive('fileModel', ['$parse', function ($parse) {
 		return {

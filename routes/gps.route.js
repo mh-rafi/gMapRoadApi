@@ -73,7 +73,9 @@ router.route('/gps/uploadCSV')
 		    	
 		    	
 		    	for(var i = 0; i <= noOfItems; i += distance) {
-			    	newItems.push(gpsDataToTrim[i])
+			    	if(gpsDataToTrim[i]) {
+			    		newItems.push(gpsDataToTrim[i])
+			    	}
 		    	}
 		    	
 		    	if(newItems.length > 97) {
@@ -222,7 +224,7 @@ router.route('/gps/road')
                     path: gps.gpsData
                 }, function(err, response) {
                      if (err) {
-                        // console.log(response.json.results);
+                        console.log(response.json.results);
                         return res.status(500).send({message: 'Bad response from Raod api!', error: err});
                      }
                      
