@@ -16,17 +16,24 @@
       .btns .btn {
         margin-right: 10px;
       }
+      .csv_upload .btn {
+        display: inline-block;
+      }
     </style>
 
   </head>
   <body>
     <div class="container">
       <div class="row">
-        <div class="col-md-12" style="margin: 0 0 30px">
+        <div class="col-md-12 csv_upload" style="margin: 0 0 30px">
           <h4>Upload a CSV file</h4>
-          <input type="file" file-model="gpsCSVFile"/>
-          <button ng-click="uploadFile()" class="btn btn-default">Upload</button>
-          <span class="uploading" ng-if="isUploading">Uploading...</span>
+          <form name="csvUploadForm">
+            <input required="" type="file" class="btn btn-default" file-model="gpsCSVFile"/>
+            <button ng-disabled="csvUploadForm.$invalid" ng-click="uploadFile()" class="btn btn-default">Upload</button>
+            <span class="uploading" ng-if="isUploading">Uploading...</span>
+            <span ng-if="isFormInvalid">Please choose a csv file</span>
+          </form>
+          
         </div>
         <div class="col-md-12 btns">
             <div class="">We have {{allGPS.length}} collections of GPS data in Database. Click on a button</div>
@@ -38,6 +45,7 @@
           <div ng-view></div>
         </div>
         <div class="col-md-12">
+          <small><a href="/">Home</a></small> | 
           <small><a href="https://github.com/mh-rafi/gMapRoadApi/blob/master/README.md">API reference</a></small>
         </div>
       </div>

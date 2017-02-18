@@ -108,7 +108,6 @@ router.route('/gps/uploadCSV')
 router.route('/gps/raw')
 	.get(function(req, res) {
 	    var queryId = req.query.id;
-	    var isFormatted = req.query.formatted;
 	    
 	   // RETURN ALL ITEMS 
 	    if(!queryId) {
@@ -149,43 +148,44 @@ router.route('/gps/raw')
 			
 			res.send(gps);
 		});
-	})
-	.post(function(req, res) {
-	    var postData = req.body.gpx
-	    if(!postData) {
-	        return res.status(400).send({message: 'Bad data'});
-	    }
-	    var gpsDataToSave = postData.wpt;
+	});
+	
+	// .post(function(req, res) {
+	//     var postData = req.body.gpx
+	//     if(!postData) {
+	//         return res.status(400).send({message: 'Bad data'});
+	//     }
+	//     var gpsDataToSave = postData.wpt;
 	    
-	    // TRIM INPUT DATA
-	    if(gpsDataToSave.length > 98) {
-	    	var gpsDataToTrim = gpsDataToSave.slice();
-	    	var lastItem = gpsDataToTrim.splice(gpsDataToTrim.length - 1);
-	    	var noOfItems = gpsDataToTrim.length;
-	    	var distance = parseInt(noOfItems / (noOfItems - 98));
-	    	for(var i = distance; i <= noOfItems; i += distance) {
-	    		gpsDataToTrim.splice(i, 1);
-	    	}
+	//     // TRIM INPUT DATA
+	//     if(gpsDataToSave.length > 98) {
+	//     	var gpsDataToTrim = gpsDataToSave.slice();
+	//     	var lastItem = gpsDataToTrim.splice(gpsDataToTrim.length - 1);
+	//     	var noOfItems = gpsDataToTrim.length;
+	//     	var distance = parseInt(noOfItems / (noOfItems - 98));
+	//     	for(var i = distance; i <= noOfItems; i += distance) {
+	//     		gpsDataToTrim.splice(i, 1);
+	//     	}
 	    	
-	    	if(gpsDataToTrim.length > 97) {
-	    		var noOfextraItem =  gpsDataToTrim.length - 97;
-	    		gpsDataToTrim.splice(gpsDataToTrim.length - noOfextraItem, noOfextraItem);
-	    		console.log( 'noOfextraItem %s', noOfextraItem);
-	    	}
-	    	gpsDataToTrim.push(lastItem[0]);
-	    	gpsDataToSave = gpsDataToTrim;
-	    }
-	    // SAVE TO DB
-	    var newGps = new GPS();
-	    newGps.gpsData = gpsDataToSave;
-	    newGps.save(function(err, resGps) {
-	        if(err) {
-	            return res.status(500).send({message: 'Error while saving data to DB'});
-	        }
+	//     	if(gpsDataToTrim.length > 97) {
+	//     		var noOfextraItem =  gpsDataToTrim.length - 97;
+	//     		gpsDataToTrim.splice(gpsDataToTrim.length - noOfextraItem, noOfextraItem);
+	//     		console.log( 'noOfextraItem %s', noOfextraItem);
+	//     	}
+	//     	gpsDataToTrim.push(lastItem[0]);
+	//     	gpsDataToSave = gpsDataToTrim;
+	//     }
+	//     // SAVE TO DB
+	//     var newGps = new GPS();
+	//     newGps.gpsData = gpsDataToSave;
+	//     newGps.save(function(err, resGps) {
+	//         if(err) {
+	//             return res.status(500).send({message: 'Error while saving data to DB'});
+	//         }
 	        
-	        res.send(resGps);
-	    });
-	})
+	//         res.send(resGps);
+	//     });
+	// })
 
 
 // ROAD APIs
@@ -203,7 +203,10 @@ router.route('/gps/road')
            }
            // RESPONSE DATA FROM DB
            if(roadGps) {
-           		roadGps.snappedPoints = formatRoadGPSData(roadGps.snappedPoints);
+           		if(isFormatted) {
+           			roadGps.snappedPoints = formatRoadGPSData(roadGps.snappedPoints);
+           		}
+           		
                 return res.send(roadGps);
            }
            
@@ -216,8 +219,6 @@ router.route('/gps/road')
     			}
     			if (!gps)
     				return res.status(404).json({message: 'no item found!'});
-    
-                // gps.gpsData = formatGPSData(gps.gpsData);
                 
                 // GET SNAPTORAD GPS FROM GOOGLE
                 googleMapsClient.snapToRoads({
@@ -236,8 +237,10 @@ router.route('/gps/road')
                         if(err) {
                             return res.status(500).send({message: 'Error while saving Road api gps to DB'});
                         }
-                        console.log('snapped')
-                        gpsRes.snappedPoints = formatRoadGPSData(gpsRes.snappedPoints);
+                        console.log('snapped');
+                        if(isFormatted) {
+                        	gpsRes.snappedPoints = formatRoadGPSData(gpsRes.snappedPoints);	
+                        }
                         res.send(gpsRes);
                      });
                 })

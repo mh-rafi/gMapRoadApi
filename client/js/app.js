@@ -35,11 +35,17 @@
 	    
 	    
 	    $rootScope.uploadFile = function() {
-	    	$rootScope.isUploading = true;
+	    	$rootScope.isFormInvalid = false;
 	        var file = $rootScope.gpsCSVFile;
+	        if(!file || file.type !== 'application/vnd.ms-excel') {
+	        	return $rootScope.isFormInvalid = true;
+	        }
+	        
+	        $rootScope.isUploading = true;
+	        
 	        var fd = new FormData();
 	        fd.append('csvfile', file);
-			// console.log(file);
+			console.log(file);
 	        $http.post('/api/gps/uploadCSV',fd, {
 	            transformRequest: angular.identity,
 	            headers: {'Content-Type': undefined}

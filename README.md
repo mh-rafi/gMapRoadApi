@@ -14,58 +14,11 @@ https://gmap-road.herokuapp.com
 ### Add new raw GPS data
 POST https://gmap-road.herokuapp.com/api/gps/raw
 
-    Sample Request body
-    {
-    	"gpx": {
-    		"wpt": [{
-    			"ele": "141.4",
-    			"name": "WP01-A",
-    			"_lat": "41.07794",
-    			"_lon": "29.0291"
-    		}, {
-    			"ele": "141.5",
-    			"name": "WP02-B",
-    			"_lat": "41.0778",
-    			"_lon": "29.02886"
-    		}, {
-    			"ele": "141.7",
-    			"name": "WP03-C",
-    			"_lat": "41.07775",
-    			"_lon": "29.02866"
-    		}, {
-    			"ele": "142.7",
-    			"name": "WP04-D",
-    			"_lat": "41.07769",
-    			"_lon": "29.02834"
-    		},........]
-    	}
-    }
-    Sample output
-    {
-    	"_id": "589bffd42da3292cd15cfad4",
-    	"gpsData": [{
-            "ele": "141.4",
-            "name": "WP01-A",
-            "_lat": "41.07794",
-            "_lon": "29.0291"
-        }, {
-            "ele": "141.5",
-            "name": "WP02-B",
-            "_lat": "41.0778",
-            "_lon": "29.02886"
-        }, {
-            "ele": "141.7",
-            "name": "WP03-C",
-            "_lat": "41.07775",
-            "_lon": "29.02866"
-        }, {
-            "ele": "142.7",
-            "name": "WP04-D",
-            "_lat": "41.07769",
-            "_lon": "29.02834"
-        },........],
-    	"__v": 0
-    }
+    Note: Request body should be formData object, file input element name should be "csvfile".
+    If data more than 100, extra data will be removed evenly from input;
+    
+    
+        
 
 	
 
@@ -76,15 +29,14 @@ GET https://gmap-road.herokuapp.com/api/gps/raw
     [{
     	"_id": "589c02bcf9c7f53a5fee39fb",
     	"gpsData": [{
-    		"ele": "118.3",
-    		"name": "WP148",
-    		"_lat": "41.06672",
-    		"_lon": "29.00071"
+    		"lng": 29.00065,
+    		"lat": 41.06672
     	}, {
-    		"ele": "118.2",
-    		"name": "WP149",
-    		"_lat": "41.06672",
-    		"_lon": "29.00065"
+    		"lng": 29.00055,
+    		"lat": 41.06671
+    	}, {
+    		"lng": 29.00041,
+    		"lat": 41.06673
     	}, 
     	....],
     	"__v": 0
@@ -92,48 +44,22 @@ GET https://gmap-road.herokuapp.com/api/gps/raw
     	"_id": "589bffd42da3292cd15cfad4",
     	"name": "tirp one",
     	"gpsData": [{
-    		"_lon": "29.0291",
-    		"_lat": "41.07794",
-    		"name": "WP01-A",
-    		"ele": "141.4"
+    		"lng": 29.00065,
+    		"lat": 41.06672
     	}, {
-    		"_lon": "29.02886",
-    		"_lat": "41.0778",
-    		"name": "WP02-B",
-    		"ele": "141.5"
+    		"lng": 29.00055,
+    		"lat": 41.06671
+    	}, {
+    		"lng": 29.00041,
+    		"lat": 41.06673
     	},  
     	....],
     	"__v": 0
     }]
 
 
-### Get single raw GPS data by id
-GET https://gmap-road.herokuapp.com/api/gps/raw/?id=589c02bcf9c7f53a5fee39fb
-
-    {
-    	"_id": "589bffd42da3292cd15cfad4",
-    	"gpsData": [{
-    		"_lon": "29.0291",
-    		"_lat": "41.07794",
-    		"name": "WP01-A",
-    		"ele": "141.4"
-    	}, {
-    		"_lon": "29.02886",
-    		"_lat": "41.0778",
-    		"name": "WP02-B",
-    		"ele": "141.5"
-    	}, {
-    		"_lon": "29.02866",
-    		"_lat": "41.07775",
-    		"name": "WP03-C",
-    		"ele": "141.7"
-    	},
-    	.....],
-    	"__v": 0
-    }
-
 ### Get single raw GPS data by id (Returns Formatted data)
-GET https://gmap-road.herokuapp.com/api/gps/raw/?id=589c02bcf9c7f53a5fee39fb&formatted=true
+GET https://gmap-road.herokuapp.com/api/gps/raw/?id=589c02bcf9c7f53a5fee39fb
 
     Sample Output
     {
