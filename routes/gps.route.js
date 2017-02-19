@@ -203,7 +203,7 @@ router.route('/gps/road')
            }
            // RESPONSE DATA FROM DB
            if(roadGps) {
-           		if(isFormatted) {
+           		if(isFormatted === 'true') {
            			roadGps.snappedPoints = formatRoadGPSData(roadGps.snappedPoints);
            		}
            		
@@ -238,7 +238,7 @@ router.route('/gps/road')
                             return res.status(500).send({message: 'Error while saving Road api gps to DB'});
                         }
                         console.log('snapped');
-                        if(isFormatted) {
+                        if(isFormatted === 'true') {
                         	gpsRes.snappedPoints = formatRoadGPSData(gpsRes.snappedPoints);	
                         }
                         res.send(gpsRes);
